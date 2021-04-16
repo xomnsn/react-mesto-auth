@@ -1,0 +1,20 @@
+.profile__user {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  box-sizing: border-box;
+  max-width: calc(100% - 190px);
+}
+
+@media screen and (max-width: 1024px) {
+  .profile__user {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile__user {
+    flex-direction: column;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,18 @@
+.profile__info {
+  margin-left: 30px;
+  width: 100%;
+  max-width: calc(100% - 150px);
+}
+
+@media screen and (max-width: 768px) {
+  .profile__info {
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile__info {
+    text-align: center;
+    margin-left: 0;
+  }
+}

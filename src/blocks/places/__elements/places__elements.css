@@ -1,0 +1,17 @@
+.places__elements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-rows: auto;
+  column-gap: 18px;
+  row-gap: 21px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+@media screen and (min-width: 880px){
+  .places__elements {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
