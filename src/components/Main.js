@@ -9,7 +9,7 @@ function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
 
   return (
-    <main className="page__main">
+    <>
       <section className="profile page__profile">
         <div className="profile__user">
           <div className="profile__avatar-container">
@@ -42,7 +42,7 @@ function Main(props) {
           ))}
         </ul>
       </section>
-    </main>
+    </>
   );
 }
 

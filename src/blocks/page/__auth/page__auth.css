@@ -1,0 +1,9 @@
+.page__auth {
+    margin-top: 60px;
+}
+
+@media screen and (max-width: 768px) {
+    .page__auth {
+        margin-top: 42px;
+    }
+}

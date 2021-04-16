@@ -1,4 +1,8 @@
 import React from "react";
+import { Route, Switch } from 'react-router-dom';
+import ProtectedRoute from "./ProtectedRoute";
+import Login from "./Login";
+import Register from "./Register";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -11,6 +15,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext"
 import api from "../utils/api";
 
 function App() {
+  const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
   const [isEditUserPopupOpen, setIsEditUserPopupOpen] = React.useState(false);
@@ -102,15 +107,28 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header />
-      <Main
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}
-        onCardClick={handleCardClick}
-        onEditUser={handleEditUserClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-      />
+      <main className="page__main">
+        <Switch>
+          <Route path="/sign-in">
+            <Login />
+          </Route>
+          <Route path="/sign-up">
+            <Register />
+          </Route>
+          <ProtectedRoute
+            path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            onCardClick={handleCardClick}
+            onEditUser={handleEditUserClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+          />
+        </Switch>
+      </main>
       <Footer />
       <EditProfilePopup
         isOpen={isEditUserPopupOpen}

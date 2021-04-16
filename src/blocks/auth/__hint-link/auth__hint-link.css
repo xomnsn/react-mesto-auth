@@ -1,0 +1,17 @@
+.auth__hint-link {
+    display: inline;
+    font-family: Inter, Arial, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 1.2;
+    color: #FFF;
+    text-decoration: none;
+    margin: 0 0 0 3px;
+    transition: opacity ease .4s;
+    opacity: 1;
+}
+
+.auth__hint-link:hover {
+    opacity: .8;
+}
