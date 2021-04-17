@@ -1,17 +1,26 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-function Register(props) {
+function Register({onRegister}) {
+  const [userData, setUserData] = React.useState({
+    password: '',
+    email: ''
+  });
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserData({
+      ...userData,
+      [name]: value
+    });
   }
 
-  function handlePasswordChange(e) {
-    setPassword(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let {password, email} = userData;
+
+    onRegister({ password, email });
   }
 
   return (
@@ -21,21 +30,21 @@ function Register(props) {
         <form noValidate
               className="auth__form"
               name="login"
-              onSubmit={props.onSubmit}>
+              onSubmit={handleSubmit}>
           <input type="email" name="email"
                  required minLength="3" maxLength="70"
                  placeholder="Email"
                  className="auth__input"
                  id="email"
-                 value={email}
-                 onChange={handleEmailChange}/>
+                 value={userData.email}
+                 onChange={handleChange}/>
           <input type="password" name="password"
                  required minLength="2" maxLength="200"
                  placeholder="Пароль"
                  className="auth__input"
                  id="password"
-                 value={password}
-                 onChange={handlePasswordChange}/>
+                 value={userData.password}
+                 onChange={handleChange}/>
           <button type="submit" className="auth__submit">Зарегистрироваться</button>
         </form>
         <div className="auth__hint">

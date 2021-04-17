@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
@@ -14,16 +14,20 @@ import ImagePopup from "./ImagePopup";
 import InfoTooltip from "./InfoTooltip";
 import { CurrentUserContext } from "../contexts/CurrentUserContext"
 import api from "../utils/api";
+import * as auth from "../utils/auth.js";
 
 function App() {
+  const history = useHistory();
+
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
+  const [email, setEmail] = React.useState('');
   const [cards, setCards] = React.useState([]);
   const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
+  const [isTooltipOk, setIsTooltipOk] = React.useState(false);
   const [isEditUserPopupOpen, setIsEditUserPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-
   const [selectedCard, setSelectedCard] = React.useState(null);
 
   function handleCardLike(card) {
@@ -94,32 +98,78 @@ function App() {
       .catch(err => console.log(err));
   }
 
+  function handleRegister({ password, email }) {
+    return auth.register({ password, email })
+      .then(() => {
+        setIsTooltipOk(true);
+        history.push('/sign-in');
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsTooltipOk(false);
+      })
+      .finally(() => {
+        setIsTooltipOpen(true);
+      });
+  }
+
+  function handleLogin({ password, email }) {
+    return auth.authorize(password, email)
+      .then((data) => {
+        if (data.token) {
+          setLoggedIn(true);
+          localStorage.setItem('token', data.token);
+          history.push('/');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  React.useEffect(() => {
+    const handleTokenCheck = () => {
+      if (localStorage.getItem('token')){
+        const token = localStorage.getItem('token');
+        auth.getContent(token)
+          .then((res) => {
+            if (res.data._id) {
+              setLoggedIn(true);
+              setCurrentUser(res.data._id);
+              setEmail(res.data.email);
+              history.push('/');
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            history.push('/sign-in')
+          });
+      }
+    }
+
+    handleTokenCheck();
+  },  [history]);
+
   // get initial user info and cards
   React.useEffect(() => {
     api.getUser()
       .then(res => setCurrentUser(res))
       .catch(err => console.log(err));
-  },  []);
+  },  [currentUser]);
 
   React.useEffect(() => {
     api.getInitialCards()
       .then((cards) => setCards(cards))
       .catch(err => console.log(err));
-  },  []);
+  },  [currentUser]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
+      <Header email={email}/>
       <main className="page__main">
         <Switch>
-          <Route path="/sign-in">
-            <Login />
-          </Route>
-          <Route path="/sign-up">
-            <Register />
-          </Route>
           <ProtectedRoute
-            path="/"
+            exact path="/"
             loggedIn={loggedIn}
             component={Main}
             cards={cards}
@@ -130,6 +180,12 @@ function App() {
             onAddPlace={handleAddPlaceClick}
             onEditAvatar={handleEditAvatarClick}
           />
+          <Route path="/sign-in">
+            <Login onLogin={handleLogin}/>
+          </Route>
+          <Route path="/sign-up">
+            <Register onRegister={handleRegister}/>
+          </Route>
         </Switch>
       </main>
       <Footer />
@@ -160,7 +216,7 @@ function App() {
         onClose={closeAllPopups}
       />
       <InfoTooltip
-        ok={false}
+        ok={isTooltipOk}
         isOpen={isTooltipOpen}
         onClose={closeAllPopups}
       />

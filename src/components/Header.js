@@ -1,7 +1,15 @@
 import React from "react";
-import {NavLink, Route, Switch} from "react-router-dom";
+import {NavLink, Route, Switch, useHistory} from "react-router-dom";
 
-function Header() {
+function Header({email}) {
+
+  const history = useHistory();
+
+  function signOut() {
+    localStorage.removeItem('token');
+    history.push('/sign-in');
+  }
+
   return (
     <header className="header">
       <NavLink to="/" className="header__logo"/>
@@ -14,8 +22,8 @@ function Header() {
             <NavLink className="header__link" to="/sign-up">Регистрация</NavLink>
           </Route>
           <Route exact path='/'>
-            <p className="header__text">email@gmail.com</p>
-            <button className="header__button">Выйти</button>
+            <p className="header__text">{email}</p>
+            <button className="header__button" onClick={signOut}>Выйти</button>
           </Route>
         </Switch>
       </div>
