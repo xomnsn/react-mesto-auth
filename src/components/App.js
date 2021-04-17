@@ -11,6 +11,7 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
+import InfoTooltip from "./InfoTooltip";
 import { CurrentUserContext } from "../contexts/CurrentUserContext"
 import api from "../utils/api";
 
@@ -18,6 +19,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [isTooltipOpen, setIsTooltipOpen] = React.useState(false);
   const [isEditUserPopupOpen, setIsEditUserPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -61,6 +63,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditUserPopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsTooltipOpen(false);
     setSelectedCard(null);
   }
 
@@ -154,6 +157,11 @@ function App() {
       />
       <ImagePopup
         card={selectedCard}
+        onClose={closeAllPopups}
+      />
+      <InfoTooltip
+        ok={false}
+        isOpen={isTooltipOpen}
         onClose={closeAllPopups}
       />
     </CurrentUserContext.Provider>
