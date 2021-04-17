@@ -1,13 +1,10 @@
 import React from "react";
-import {NavLink, Route, Switch, useHistory} from "react-router-dom";
+import {NavLink, Route, Switch} from "react-router-dom";
 
-function Header({email}) {
+function Header({email, onLogout}) {
 
-  const history = useHistory();
-
-  function signOut() {
-    localStorage.removeItem('token');
-    history.push('/sign-in');
+  function handleLogout() {
+    onLogout();
   }
 
   return (
@@ -23,7 +20,7 @@ function Header({email}) {
           </Route>
           <Route exact path='/'>
             <p className="header__text">{email}</p>
-            <button className="header__button" onClick={signOut}>Выйти</button>
+            <button className="header__button" onClick={handleLogout}>Выйти</button>
           </Route>
         </Switch>
       </div>

@@ -127,6 +127,12 @@ function App() {
       });
   }
 
+  function handleLogout() {
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+    history.push('/sign-in');
+  }
+
   React.useEffect(() => {
     const handleTokenCheck = () => {
       if (localStorage.getItem('token')){
@@ -155,17 +161,17 @@ function App() {
     api.getUser()
       .then(res => setCurrentUser(res))
       .catch(err => console.log(err));
-  },  [currentUser]);
+  },  []);
 
   React.useEffect(() => {
     api.getInitialCards()
       .then((cards) => setCards(cards))
       .catch(err => console.log(err));
-  },  [currentUser]);
+  },  []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header email={email}/>
+      <Header email={email} onLogout={handleLogout}/>
       <main className="page__main">
         <Switch>
           <ProtectedRoute
