@@ -6,6 +6,7 @@
 @import url('./blocks/page/__main/page__main.css');
 @import url('./blocks/page/__profile/page__profile.css');
 @import url('./blocks/page/__auth/page__auth.css');
+@import url('./blocks/page/__not-found/page__not-found.css');
 @import url('./blocks/page/__places/page__places.css');
 @import url('./blocks/page/__footer/page__footer.css');
 
@@ -75,3 +76,6 @@
 @import url('./blocks/auth/__hint/auth__hint.css');
 @import url('./blocks/auth/__hint-text/auth__hint-text.css');
 @import url('./blocks/auth/__hint-link/auth__hint-link.css');
+
+@import url('./blocks/not-found/not-found.css');
+@import url('./blocks/not-found/__header/not-found__header.css');

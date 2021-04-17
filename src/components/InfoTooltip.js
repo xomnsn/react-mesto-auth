@@ -3,12 +3,8 @@ import okImg from "../images/ok.svg";
 import errorImg from "../images/error.svg";
 
 function InfoTooltip(props) {
-  const {ok, isOpen, onClose} = props;
+  const {ok, isOpen, onClose, message} = props;
 
-  const message = {
-    err: "Что-то пошло не так! Попробуйте ещё раз.",
-    ok: "Вы успешно зарегистрировались!"
-  };
   const style = {
     backgroundImage: `url(${ok ? okImg : errorImg})`
   }

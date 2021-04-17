@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
+import PageNotFound from "./PageNotFound";
 import Login from "./Login";
 import Register from "./Register";
 import Header from "./Header";
@@ -29,6 +30,11 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+
+  const tooltipMessage = {
+    err: "Что-то пошло не так! Попробуйте ещё раз.",
+    ok: "Вы успешно зарегистрировались!"
+  };
 
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -130,6 +136,8 @@ function App() {
   function handleLogout() {
     localStorage.removeItem('token');
     setLoggedIn(false);
+    setEmail('');
+    setCurrentUser({});
     history.push('/sign-in');
   }
 
@@ -154,20 +162,20 @@ function App() {
     }
 
     handleTokenCheck();
-  },  [history]);
+  },  [loggedIn, history]);
 
   // get initial user info and cards
   React.useEffect(() => {
     api.getUser()
       .then(res => setCurrentUser(res))
       .catch(err => console.log(err));
-  },  []);
+  },  [loggedIn]);
 
   React.useEffect(() => {
     api.getInitialCards()
       .then((cards) => setCards(cards))
       .catch(err => console.log(err));
-  },  []);
+  },  [loggedIn]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -191,6 +199,9 @@ function App() {
           </Route>
           <Route path="/sign-up">
             <Register onRegister={handleRegister}/>
+          </Route>
+          <Route path="*">
+            <PageNotFound />
           </Route>
         </Switch>
       </main>
@@ -225,6 +236,7 @@ function App() {
         ok={isTooltipOk}
         isOpen={isTooltipOpen}
         onClose={closeAllPopups}
+        message={tooltipMessage}
       />
     </CurrentUserContext.Provider>
   );
